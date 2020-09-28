@@ -29,6 +29,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
@@ -81,10 +85,10 @@
 				<configuration>
 					<driver>org.postgresql.Driver</driver>
 					<url>jdbc:postgresql://localhost:5432/sisvetor</url>
-					<user>postgres</user>
-					<password>postgres</password>
+					<user>patrick</user>
+					<password>patrick</password>
 					<baselineOnMigrate>true</baselineOnMigrate>
-					<schemas>sisvetor</schemas>
+					<schemas>public</schemas>
 					<locations>
 						<location>filesystem:src/main/resources/db/migration</location>
 					</locations>
