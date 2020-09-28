@@ -1,21 +1,24 @@
-CREATE SEQUENCE seq_item;
-CREATE SEQUENCE seq_sub_item;
+-- noinspection SqlDialectInspectionForFile
+-- noinspection SqlNoDataSourceInspectionForFile
 
-CREATE TABLE item
+CREATE SEQUENCE IF NOT EXISTS seq_item;
+CREATE SEQUENCE IF NOT EXISTS seq_sub_item;
+
+CREATE TABLE IF NOT EXISTS item
 (
     id BIGINT DEFAULT nextval('seq_item'),
     nome varchar(100),
     PRIMARY KEY(id)
 );
 
-CREATE TABLE sub_item
+CREATE TABLE IF NOT EXISTS sub_item
 (
     id BIGINT DEFAULT nextval('seq_sub_item'),
     nome varchar(100),
     PRIMARY KEY(id)
 );
 
-CREATE TABLE item_sub_item
+CREATE TABLE IF NOT EXISTS item_sub_item
 (
     id BIGINT,
     item_id BIGINT,
