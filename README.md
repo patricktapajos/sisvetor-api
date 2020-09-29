@@ -19,7 +19,6 @@ As demais dependências encontram-se no arquivo de configuração pom.xml.
 1. No diretório /src/main/resources, crie uma cópia do arquivo **application.properties.example** com o nome **application.properties** e coloque as informações para conexão com um datasource;
 2. No diretório raiz, crie uma cópia do arquivo **flyway.conf.example** com o nome **flyway.conf** e coloque as informações restantes para conexão com a base de dados.
 
-
 # Deployment
 > Ambiente de dsv 
 
