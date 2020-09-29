@@ -1,4 +1,4 @@
-package com.arbocontrol.sisvetor.model;
+package com.arbocontrol.sisvetor.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;

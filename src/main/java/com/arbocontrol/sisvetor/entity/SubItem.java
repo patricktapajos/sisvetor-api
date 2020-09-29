@@ -1,4 +1,4 @@
-package com.arbocontrol.sisvetor.model;
+package com.arbocontrol.sisvetor.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,9 +8,7 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Transactional
 @Entity

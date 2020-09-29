@@ -4,7 +4,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import com.arbocontrol.sisvetor.model.SubItem;
+import java.util.Set;
+
+import com.arbocontrol.sisvetor.entity.Item;
+import com.arbocontrol.sisvetor.entity.SubItem;
 import com.arbocontrol.sisvetor.repository.SubItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -81,6 +84,19 @@ class SubItemController {
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @GetMapping("/{id}/itens")
+    public ResponseEntity<List<Item>> listarItens(@PathVariable("id") BigInteger id) {
+
+        Optional<SubItem> existingItemOptional = repository.findById(id);
+        SubItem subItem = existingItemOptional.get();
+
+        if (!subItem.getItens().isEmpty()) {
+            return new ResponseEntity<>(subItem.getItens(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

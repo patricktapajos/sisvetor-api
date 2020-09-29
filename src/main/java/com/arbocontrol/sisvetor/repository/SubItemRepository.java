@@ -2,7 +2,7 @@ package com.arbocontrol.sisvetor.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import com.arbocontrol.sisvetor.model.SubItem;
+import com.arbocontrol.sisvetor.entity.SubItem;
 
 import java.math.BigInteger;
 

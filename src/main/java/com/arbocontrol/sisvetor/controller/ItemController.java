@@ -2,11 +2,9 @@ package com.arbocontrol.sisvetor.controller;
     
 import java.math.BigInteger;
 import java.util.*;
-
-import com.arbocontrol.sisvetor.model.Item;
-import com.arbocontrol.sisvetor.model.ItemSubItem;
-import com.arbocontrol.sisvetor.model.ItemSubItemID;
-import com.arbocontrol.sisvetor.model.SubItem;
+import com.arbocontrol.sisvetor.entity.Item;
+import com.arbocontrol.sisvetor.entity.ItemSubItemID;
+import com.arbocontrol.sisvetor.entity.SubItem;
 import com.arbocontrol.sisvetor.repository.ItemRepository;
 import com.arbocontrol.sisvetor.repository.ItemSubItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +99,19 @@ class ItemController {
             }
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @GetMapping("/{id}/subitens")
+    public ResponseEntity<Set<SubItem>> listarSubItens(@PathVariable("id") BigInteger id) {
+
+        Optional<Item> existingItemOptional = repository.findById(id);
+        Item item = existingItemOptional.get();
+
+        if (!item.getSubItens().isEmpty()) {
+            return new ResponseEntity<>(item.getSubItens(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

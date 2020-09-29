@@ -1,4 +1,4 @@
-package com.arbocontrol.sisvetor.model;
+package com.arbocontrol.sisvetor.entity;
 
 import lombok.Data;
 
