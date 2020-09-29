@@ -1,23 +1,15 @@
 package com.arbocontrol.sisvetor.controller;
     
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.arbocontrol.sisvetor.model.Item;
+import com.arbocontrol.sisvetor.model.SubItem;
 import com.arbocontrol.sisvetor.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/item")
@@ -54,20 +46,62 @@ class ItemController {
 
     @PutMapping("/editar/{id}")
     public ResponseEntity<Item> editar(@PathVariable("id") BigInteger id, @RequestBody Item item) {
+        try {
+            Optional<Item> existingItemOptional = repository.findById(id);
+            if (existingItemOptional.isPresent()) {
+                Item existingItem = existingItemOptional.get();
+                existingItem.getSubItens().addAll(item.getSubItens());
+                existingItem.setNome(item.getNome());
+                return new ResponseEntity<>(repository.save(existingItem), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @GetMapping("/consultar/{id}")
+    public ResponseEntity<Item> getById(@PathVariable("id") BigInteger id) {
         Optional<Item> existingItemOptional = repository.findById(id);
         if (existingItemOptional.isPresent()) {
-            Item existingItem = existingItemOptional.get();
-            existingItem.setNome(item.getNome());
-            return new ResponseEntity<>(repository.save(existingItem), HttpStatus.OK);
+            return new ResponseEntity<>(existingItemOptional.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<HttpStatus> deletar(@PathVariable("id") BigInteger id) {
         try {
             repository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @PostMapping("/{id}/cadastrarsubitem")
+    public ResponseEntity<Item> cadastrarsubitem(@PathVariable("id") BigInteger id, @RequestBody SubItem subItem) {
+        try {
+            Optional<Item> existingItemOptional = repository.findById(id);
+            if (existingItemOptional.isPresent()) {
+                Item existingItem = existingItemOptional.get();
+                existingItem.getSubItens().add(subItem);
+                return new ResponseEntity<>(repository.save(existingItem), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
+    @DeleteMapping("/{item}/deletarsubitem/{subitem}")
+    public ResponseEntity<HttpStatus> deletarSubItem(@PathVariable("item") BigInteger item_id, @PathVariable("subitem") BigInteger subitem_id) {
+        try {
+            repository.deleteItemSubItem(item_id, subitem_id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);

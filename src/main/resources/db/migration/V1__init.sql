@@ -3,6 +3,7 @@
 
 CREATE SEQUENCE IF NOT EXISTS seq_item;
 CREATE SEQUENCE IF NOT EXISTS seq_sub_item;
+-- CREATE SEQUENCE IF NOT EXISTS seq_item_sub_item;
 
 CREATE TABLE IF NOT EXISTS item
 (
@@ -20,10 +21,10 @@ CREATE TABLE IF NOT EXISTS sub_item
 
 CREATE TABLE IF NOT EXISTS item_sub_item
 (
-    id BIGINT,
+--     id BIGINT DEFAULT nextval('seq_item_sub_item'),
     item_id BIGINT,
     sub_item_id BIGINT,
-    PRIMARY KEY(id),
+--     PRIMARY KEY(id),
     CONSTRAINT fk_item FOREIGN KEY(item_id) REFERENCES item(id),
     CONSTRAINT fk_sub_item_id FOREIGN KEY(sub_item_id) REFERENCES sub_item(id)
 );

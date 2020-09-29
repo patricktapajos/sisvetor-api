@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.arbocontrol.sisvetor.model.SubItem;
 import com.arbocontrol.sisvetor.repository.SubItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +58,17 @@ class SubItemController {
             SubItem existingSubItem = existingSubItemOptional.get();
             existingSubItem.setNome(SubItem.getNome());
             return new ResponseEntity<>(repository.save(existingSubItem), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/consultar/{id}")
+    public ResponseEntity<SubItem> getById(@PathVariable("id") BigInteger id) {
+        Optional<SubItem> existingItemOptional = repository.findById(id);
+
+        if (existingItemOptional.isPresent()) {
+            return new ResponseEntity<>(existingItemOptional.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
