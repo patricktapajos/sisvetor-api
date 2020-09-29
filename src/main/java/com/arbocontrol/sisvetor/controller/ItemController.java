@@ -1,17 +1,23 @@
 package com.arbocontrol.sisvetor.controller;
     
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import com.arbocontrol.sisvetor.entity.Item;
 import com.arbocontrol.sisvetor.entity.ItemSubItemID;
 import com.arbocontrol.sisvetor.entity.SubItem;
 import com.arbocontrol.sisvetor.repository.ItemRepository;
 import com.arbocontrol.sisvetor.repository.ItemSubItemRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Api(value = "item", tags = {"Item"})
 @RestController
 @RequestMapping("/api/item")
 class ItemController {
@@ -22,6 +28,7 @@ class ItemController {
     @Autowired
     ItemSubItemRepository deleteItemSubItem;
 
+    @ApiOperation(value = "Listagem de itens cadastrados")
     @GetMapping("/listar")
     public ResponseEntity<List<Item>> listar() {
         try {
@@ -38,6 +45,7 @@ class ItemController {
         }
     }
 
+    @ApiOperation(value = "Cadastro de um item")
     @PostMapping("/cadastrar")
     public ResponseEntity<Item> cadastrar(@RequestBody Item item) {
         try {
@@ -48,6 +56,7 @@ class ItemController {
         }
     }
 
+    @ApiOperation(value = "Atualização de um item já existente")
     @PutMapping("/editar/{id}")
     public ResponseEntity<Item> editar(@PathVariable("id") BigInteger id, @RequestBody Item item) {
         try {
@@ -65,6 +74,7 @@ class ItemController {
         }
     }
 
+    @ApiOperation(value = "Consulta por um item cadastrado")
     @GetMapping("/consultar/{id}")
     public ResponseEntity<Item> getById(@PathVariable("id") BigInteger id) {
         Optional<Item> existingItemOptional = repository.findById(id);
@@ -76,6 +86,7 @@ class ItemController {
     }
 
 
+    @ApiOperation(value = "Exclusão de um item")
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<HttpStatus> deletar(@PathVariable("id") BigInteger id) {
         try {
@@ -85,7 +96,7 @@ class ItemController {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
-
+    @ApiOperation(value = "Cadastro de um sub-item para um item")
     @PostMapping("/{id}/cadastrarsubitem")
     public ResponseEntity<Item> cadastrarsubitem(@PathVariable("id") BigInteger id, @RequestBody SubItem subItem) {
         try {
@@ -102,6 +113,7 @@ class ItemController {
         }
     }
 
+    @ApiOperation(value = "Listagem de sub-itens relacionados à um item")
     @GetMapping("/{id}/subitens")
     public ResponseEntity<Set<SubItem>> listarSubItens(@PathVariable("id") BigInteger id) {
 
@@ -115,6 +127,7 @@ class ItemController {
         }
     }
 
+    @ApiOperation(value = "Exclusão da ligação de um item e um sub-item")
     @DeleteMapping("/{item}/deletarsubitem/{subitem}")
     public ResponseEntity<HttpStatus> deletarSubItem(@PathVariable("item") BigInteger item_id, @PathVariable("subitem") BigInteger subitem_id) {
         try {
