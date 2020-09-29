@@ -1,8 +1,8 @@
 package com.arbocontrol.sisvetor.controller;
     
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import com.arbocontrol.sisvetor.entity.Item;
@@ -13,6 +13,10 @@ import com.arbocontrol.sisvetor.repository.ItemSubItemRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,20 +30,22 @@ class ItemController {
     ItemRepository repository;
 
     @Autowired
-    ItemSubItemRepository deleteItemSubItem;
+    ItemSubItemRepository itemSubItemRepository;
 
     @ApiOperation(value = "Listagem de itens cadastrados")
     @GetMapping("/listar")
-    public ResponseEntity<List<Item>> listar() {
+    public ResponseEntity<List<Item>> listar(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
         try {
-            List<Item> items = new ArrayList<Item>();
+            Pageable pageRequest = PageRequest.of(page, size, Sort.by("nome").ascending());
 
-            repository.findAll().forEach(items::add);
+            Page<Item> pagedResult = repository.findAll(pageRequest);
 
-            if (items.isEmpty())
+            if (pagedResult.getContent().isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-            return new ResponseEntity<>(items, HttpStatus.OK);
+            return new ResponseEntity<>(pagedResult.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -134,7 +140,7 @@ class ItemController {
             ItemSubItemID itemSubItem = new ItemSubItemID();
             itemSubItem.setItem_id(item_id);
             itemSubItem.setSub_item_id(subitem_id);
-            deleteItemSubItem.deleteById(itemSubItem);
+            itemSubItemRepository.deleteById(itemSubItem);
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

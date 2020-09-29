@@ -10,16 +10,13 @@ import com.arbocontrol.sisvetor.repository.SubItemRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "sub-item", tags = {"SubItem"})
 @RestController
@@ -31,16 +28,16 @@ class SubItemController {
 
     @ApiOperation(value = "Listagem de subitens cadastrados")
     @GetMapping("/listar")
-    public ResponseEntity<List<SubItem>> listar() {
+    public ResponseEntity<List<SubItem>> listar(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         try {
-            List<SubItem> SubItems = new ArrayList<SubItem>();
+            Pageable pageRequest = PageRequest.of(page, size, Sort.by("nome").ascending());
+            Page<SubItem> pagedResult = repository.findAll(pageRequest);
 
-            repository.findAll().forEach(SubItems::add);
-
-            if (SubItems.isEmpty())
+            if (pagedResult.getContent().isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-            return new ResponseEntity<>(SubItems, HttpStatus.OK);
+            return new ResponseEntity<>(pagedResult.getContent(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
