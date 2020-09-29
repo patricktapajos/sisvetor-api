@@ -83,18 +83,11 @@
 					</execution>
 				</executions>
 				<configuration>
-					<driver>org.postgresql.Driver</driver>
-					<url>jdbc:postgresql://localhost:5432/sisvetor</url>
-					<user>patrick</user>
-					<password>patrick</password>
-					<baselineOnMigrate>true</baselineOnMigrate>
-					<schemas>public</schemas>
-					<locations>
-						<location>filesystem:src/main/resources/db/migration</location>
-					</locations>
+					<configFiles>
+						<configFile>flyway.conf</configFile>
+					</configFiles>
 				</configuration>
 				</plugin>
 		</plugins>
 	</build>
-
 </project>

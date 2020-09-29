@@ -11,10 +11,18 @@
 
 # Implementação
 Para a implementação foi utilizado o framework Spring Boot (https://spring.io/projects/spring-boot) e 
-o banco de dados banco de dados PostgreSQL (https://www.postgresql.org/). Destaque para a utilização do JWT (https://jwt.io/) para incrmentar a segurança das requisições do cliente, a ferramenta de migração Flyway (https://flywaydb.org/documentation/plugins/springboot) para criação e controle da base e o Spring Data (https://spring.io/projects/spring-data) para acesso à base de dados.
+o banco de dados banco de dados PostgreSQL (https://www.postgresql.org/). Destaque para a ferramenta de migração Flyway (https://flywaydb.org/documentation/plugins/springboot) para criação e controle e o Spring Data (https://spring.io/projects/spring-data) para acesso à base de dados.
 As demais dependências encontram-se no arquivo de configuração pom.xml.
 
+#Pré-Requisitos
+
+1. No diretório /src/main/resources, crie uma cópia do arquivo **application.properties.example** com o nome **application.properties** e coloque as informações para conexão com um datasource;
+2. No diretório raiz, crie uma cópia do arquivo **flyway.conf.example** com o nome **flyway.conf** e coloque as informações restantes para conexão com a base de dados.
+
+
 # Deployment
-Vá ao diretório raiz e execute: 
+> Ambiente de dsv 
+
+No diretório raiz execute: 
   - **mvnw spring-boot:run**, caso esteja utilizando SO windows ou 
   - **.\mvnw spring-boot:run**, caso esteja utilizando sistemas Unix.
