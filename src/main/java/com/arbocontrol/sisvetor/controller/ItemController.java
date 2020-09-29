@@ -4,8 +4,11 @@ import java.math.BigInteger;
 import java.util.*;
 
 import com.arbocontrol.sisvetor.model.Item;
+import com.arbocontrol.sisvetor.model.ItemSubItem;
+import com.arbocontrol.sisvetor.model.ItemSubItemID;
 import com.arbocontrol.sisvetor.model.SubItem;
 import com.arbocontrol.sisvetor.repository.ItemRepository;
+import com.arbocontrol.sisvetor.repository.ItemSubItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ class ItemController {
 
     @Autowired
     ItemRepository repository;
+
+    @Autowired
+    ItemSubItemRepository deleteItemSubItem;
 
     @GetMapping("/listar")
     public ResponseEntity<List<Item>> listar() {
@@ -101,7 +107,11 @@ class ItemController {
     @DeleteMapping("/{item}/deletarsubitem/{subitem}")
     public ResponseEntity<HttpStatus> deletarSubItem(@PathVariable("item") BigInteger item_id, @PathVariable("subitem") BigInteger subitem_id) {
         try {
-            repository.deleteItemSubItem(item_id, subitem_id);
+            ItemSubItemID itemSubItem = new ItemSubItemID();
+            itemSubItem.setItem_id(item_id);
+            itemSubItem.setSub_item_id(subitem_id);
+            deleteItemSubItem.deleteById(itemSubItem);
+
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
