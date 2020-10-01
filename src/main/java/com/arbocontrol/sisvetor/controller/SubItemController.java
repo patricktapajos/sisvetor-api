@@ -27,8 +27,8 @@ class SubItemController {
     SubItemRepository repository;
 
     @ApiOperation(value = "Listagem de subitens cadastrados")
-    @GetMapping("/listar")
-    public ResponseEntity<List<SubItem>> listar(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+    @GetMapping("")
+    public ResponseEntity<List<SubItem>> getAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                              @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
         try {
             Pageable pageRequest = PageRequest.of(page, size, Sort.by("nome").ascending());
@@ -44,8 +44,8 @@ class SubItemController {
     }
 
     @ApiOperation(value="Cadastro de um sub-item")
-    @PostMapping("/cadastrar")
-    public ResponseEntity<SubItem> cadastrar(@RequestBody SubItem SubItem) {
+    @PostMapping("/")
+    public ResponseEntity<SubItem> create(@RequestBody SubItem SubItem) {
         try {
             SubItem savedSubItem = repository.save(SubItem);
             return new ResponseEntity<>(savedSubItem, HttpStatus.CREATED);
@@ -55,8 +55,8 @@ class SubItemController {
     }
 
     @ApiOperation(value="Atualização de um sub-item já existente")
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<SubItem> editar(@PathVariable("id") BigInteger id, @RequestBody SubItem SubItem) {
+    @PutMapping("/{id}")
+    public ResponseEntity<SubItem> update(@PathVariable("id") BigInteger id, @RequestBody SubItem SubItem) {
         Optional<SubItem> existingSubItemOptional = repository.findById(id);
         if (existingSubItemOptional.isPresent()) {
             SubItem existingSubItem = existingSubItemOptional.get();
@@ -68,7 +68,7 @@ class SubItemController {
     }
 
     @ApiOperation(value="Consulta por um sub-item cadastrado")
-    @GetMapping("/consultar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<SubItem> getById(@PathVariable("id") BigInteger id) {
         Optional<SubItem> existingItemOptional = repository.findById(id);
 
@@ -80,8 +80,8 @@ class SubItemController {
     }
 
     @ApiOperation(value="Exclusão de um item")
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<HttpStatus> deletar(@PathVariable("id") BigInteger id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") BigInteger id) {
         try {
             repository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -91,7 +91,7 @@ class SubItemController {
     }
     @ApiOperation(value="Listagem de itens relacionados à um sub-item")
     @GetMapping("/{id}/itens")
-    public ResponseEntity<List<Item>> listarItens(@PathVariable("id") BigInteger id) {
+    public ResponseEntity<List<Item>> listItens(@PathVariable("id") BigInteger id) {
 
         Optional<SubItem> existingItemOptional = repository.findById(id);
         SubItem subItem = existingItemOptional.get();
